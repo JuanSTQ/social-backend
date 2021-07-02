@@ -16,17 +16,17 @@ const check = {
     console.log(decoded)
     //comprobar si owner es el mismo user autenticado
     if(decoded.id !== owner){
-      throw error('No tienes permisos para hacer esta accion', 401)
+      throw error('No tienes permisos para hacer esta accion', 401) //throw error()→new Error ← ES LO QUE SUCEDE INDIRECTAMENTE
     }
 
   }
 }
 function getToken(auth){
   if(!auth){
-    throw new Error('No existe el token')
+    throw error('No existe el token', 400)
   }
   if(auth.indexOf('Bearer')===-1){
-    throw new Error('Formato invalido')
+    throw error('Formato incorrecto en el token', 400)
   }
   let token = auth.replace('Bearer ', '');
   return token
