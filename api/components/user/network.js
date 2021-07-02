@@ -1,8 +1,8 @@
 const express = require('express');
+const secure = require('./secure');
 const response = require("../../../network/response")
 const router = express.Router();
 const controller = require('./index')
-
 router.get('/', (req,res)=>{
   controller.list()
     .then(list=>{
@@ -44,8 +44,8 @@ router.get('/', (req,res)=>{
       })
   })
 
-  router.put('/:id', (req,res)=>{
-    controller.update(req.params.id, req.body.user)
+  router.put('/:id', secure('update'), (req,res)=>{ //ejecutamos secure, y devolvemos nuestro middleware a nuestro router.put('/')
+    controller.update(req.params.id, req.body.user) //middleware se ejecuta cuando suceda el method y le envia el req, res de manera automatica
       .then(user=>{
         response.success(req, res, user, 200)
       })

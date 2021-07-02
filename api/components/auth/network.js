@@ -6,6 +6,7 @@ const controller = require('./index')
 router.post('/login', function(req,res){
   controller.login(req.body.username, req.body.password)
     .then(token=>{
+      //req.headers.authorization = token
       response.success(req,res,token,200)
     })  
     .catch(err=>{

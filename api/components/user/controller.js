@@ -1,6 +1,7 @@
 const TABLA = 'user'
 const {nanoid} = require('nanoid')
 const auth = require('../auth');
+const secure = require('./secure')
 
 module.exports =  function(injectedStore){
   let store = injectedStore
@@ -33,6 +34,7 @@ module.exports =  function(injectedStore){
   }
 
   function update(id, data){
+
     const format = {}
     for(let prop in data){
       format[prop] = data[prop]
