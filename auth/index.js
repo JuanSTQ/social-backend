@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken')
 const config = require('../config')
 const secret = config.jwt.secret; 
+const error = require('../utils/error')
+
 function sign(data){
   return jwt.sign(data,secret); //firma para codificar la data
 }     
@@ -14,9 +16,9 @@ const check = {
     console.log(decoded)
     //comprobar si owner es el mismo user autenticado
     if(decoded.id !== owner){
-      throw new Error('No tienes permisos para hacer esta accion')
+      throw error('No tienes permisos para hacer esta accion', 401)
     }
-    
+
   }
 }
 function getToken(auth){
