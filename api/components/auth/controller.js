@@ -22,15 +22,20 @@ module.exports =  function(injectedStore){
   }
   async function login(username, password){
     const data = await store.query(TABLA, {username:username}) //query es nuestro obj a buscar
+    console.log('data::')
+    console.log(data)
     return bcrypt.compare(password, data.password)
       .then(Iguales=>{
         if(Iguales){
+          
           return auth.sign(data)
         }else{
           throw new Error('Informacion Invalida')
         }
       })
   }
+
+  
   return {
     upsert,
     login,

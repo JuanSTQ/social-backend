@@ -32,10 +32,10 @@ async function remove(tabla, id){
   return db[tabla]
 }
 
-async function update(tabla, id, data){
+async function update(tabla,data){
    const referenceList = await list(tabla)
    //referenceList[0] = {} modelo de mutacion
-   const index = referenceList.findIndex((user)=>{return user.id === id})
+   const index = referenceList.findIndex((user)=>{return user.id === data.id})
 
    referenceList[index] = data
 

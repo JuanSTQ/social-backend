@@ -1,4 +1,4 @@
-const myslq = require('mysql')
+const mysql = require('mysql')
 const config = require('../config')
 
 
@@ -13,7 +13,7 @@ const dbconf = {
 let connection;
 
 function handleConnect(){
-  connection = myslq.createConnection(dbconf)
+  connection = mysql.createConnection(dbconf)
   connection.connect((err)=>{ //middleware para el error
     if(err){
       console.log("[db::ERROR] " + err);
@@ -22,6 +22,7 @@ function handleConnect(){
       console.log('DB CONNECTED')
     }
   })
+  //SI YA EXISTE UN CONEXION ↓ CON LO SIGUIENTE CAPTURAMOS CUALQUIER ERROR QUE SUCEDE DURANTE LA CONEXION
   connection.on('error', err=>{
     console.log("[db::ERROR] " + err);
     if(err.code === 'PROTOCOL_CONNECTION_LOST'){
@@ -42,6 +43,51 @@ function get(table,id){
     })
   })
 }
- module.exports = {
-   get,
- }
+
+function list(table){
+  return new Promise((resolve,reject)=>{
+    connection.query(`SELECT * FROM ${table}`, (err,data)=>{
+    console.log(data)
+    err ? reject(err):resolve(data) 
+
+  }) 
+  })
+}
+
+function upsert(table, data){
+  return new Promise((resolve,reject)=>{
+    connection.query(`INSERT INTO ${table} SET ?`, data, (err,result)=>{
+      err ? reject(err) : resolve(result)
+    })
+  })
+}
+function update(table, data){
+  return new Promise((resolve,reject)=>{
+    connection.query(`UPDATE ${table} SET ? WHERE id=?`, [data,data.id], (err,result)=>{
+      console.log('result::')
+      console.log(result)
+      err ? reject(err) : resolve(result)
+    })
+  })
+} 
+function query(table, query){
+  return new Promise((resolve,reject)=>{
+    connection.query(`SELECT * FROM ${table} WHERE ?`, query, (err,result)=>{
+      if(err){
+        reject(err)
+      }
+      const formatjwt = {}
+      for(let prop in result[0]){
+        formatjwt[prop] = result[0][prop]
+      }
+      resolve(formatjwt)
+    })
+  })
+}
+module.exports = {
+    get,
+    list,
+    upsert,
+    update,
+    query,
+}

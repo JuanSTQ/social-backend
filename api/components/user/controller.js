@@ -1,7 +1,7 @@
 const TABLA = 'user'
 const {nanoid} = require('nanoid')
 const auth = require('../auth');
-const secure = require('./secure')
+
 
 module.exports =  function(injectedStore){
   let store = injectedStore
@@ -34,13 +34,14 @@ module.exports =  function(injectedStore){
   }
 
   function update(id, data){
-
     const format = {}
     for(let prop in data){
-      format[prop] = data[prop]
+      if(prop !== "password" && prop !== "id"){
+        format[prop] = data[prop]
+      }
     }
-    !format.id && (format.id  = nanoid())
-    return store.update(TABLA,id,format)
+    !format.id && (format.id  = id)
+    return store.update(TABLA,format)
   }
   return {
     list, 
