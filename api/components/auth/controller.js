@@ -24,11 +24,10 @@ module.exports =  function(injectedStore){
     const data = await store.query(TABLA, {username:username}) //query es nuestro obj a buscar
     console.log('data::')
     console.log(data)
-    return bcrypt.compare(password, data.password)
+    return bcrypt.compare(password, data[0].password)
       .then(Iguales=>{
         if(Iguales){
-          
-          return auth.sign(data)
+          return auth.sign(data[0])
         }else{
           throw new Error('Informacion Invalida')
         }

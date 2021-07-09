@@ -70,20 +70,32 @@ function update(table, data){
     })
   })
 } 
-function query(table, query){
+function query(table, query, join){
+  let joinQuery = "";
+  if(join){
+    const key = Object.keys(join)[0];
+    const value = join[key];
+    //UNIR TABLA DE USER CON LA DE USERFOLLOW CON USERTO
+    joinQuery = `JOIN ${key} ON ${table}.${value} = ${key}.id`;
+  } 
   return new Promise((resolve,reject)=>{
-    connection.query(`SELECT * FROM ${table} WHERE ?`, query, (err,result)=>{
+    connection.query(`SELECT * FROM ${table} ${joinQuery} WHERE ${table}.?`, query, (err,result)=>{
       if(err){
         reject(err)
       }
-      const formatjwt = {}
-      for(let prop in result[0]){
-        formatjwt[prop] = result[0][prop]
-      }
-      resolve(formatjwt)
+      const resultARR = result.map((user)=>{
+        const formatjwt = {}
+        for(let prop in user){
+          formatjwt[prop] = user[prop]
+        }
+        return formatjwt
+      })
+      resolve(resultARR)
     })
   })
 }
+
+
 module.exports = {
     get,
     list,

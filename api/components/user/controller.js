@@ -43,12 +43,29 @@ module.exports =  function(injectedStore){
     !format.id && (format.id  = id)
     return store.update(TABLA,format)
   }
+  function follow(from,to){
+    const format = {
+      user_from: from,
+      user_to: to,
+    }
+    return store.upsert(TABLA+"_follow",format)
+  }
+
+  async function followList(id){
+    const join = {}
+    join[TABLA] = 'user_to'; // { user: 'user_to' }
+    const query = { user_from: id };
+    return await store.query(TABLA + '_follow', query, join);
+  }
+
   return {
     list, 
     get,
     remove,
     send,
     update,
+    follow,
+    followList,
   }  
 }
 

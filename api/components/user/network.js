@@ -21,6 +21,14 @@ router.get('/', (req,res, next)=>{
   })
 
 })
+  router.get('/follows/:id', (req,res,next)=>{
+    controller.followList(req.params.id)
+      .then(list=>{
+        response.success(req,res,list, 200)
+      })
+      .catch(next)
+  })
+
   router.delete('/:id', function(req,res,next){
     console.log(req.params.id)
     controller.remove(req.params.id)
@@ -53,5 +61,16 @@ router.get('/', (req,res, next)=>{
       
   })
   
+  router.post('/follow/:id', secure('follow'), (req,res,next)=>{ //el usuario que hara la accion debe estar autenticado
+    //req.user.id → el id del usuario que esta yendo seguir a req.params.id
+    //req.params.id →  el id del ususario al que queremos seguir
+    console.log(req.user.id)
+    controller.follow(req.user.id, req.params.id) 
+      .then(result=>{
+        response.success(req,res,result,200)
+      })
+      .catch(next) //app.use(router) → app.use(err)
+  })
+
 
 module.exports = router

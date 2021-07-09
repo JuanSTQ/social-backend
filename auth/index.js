@@ -19,8 +19,11 @@ const check = {
       throw error('No tienes permisos para hacer esta accion', 401) //throw error()→new Error ← ES LO QUE SUCEDE INDIRECTAMENTE
     }
     console.log('YOKENS IGUALE')
-
+  },
+  logged: function check(req){
+    const decoded = decodeHeader(req)
   }
+
 }
 function getToken(auth){
   if(!auth){
