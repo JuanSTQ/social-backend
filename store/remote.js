@@ -5,18 +5,33 @@ function createRemoteDB(host,port){ //el host y port de nuestro microservicio
   function list(table){
     return req('GET', table)
   }
-/*   function get(table,id){
-
+  function get(table, id){
+    return req('GET', table, id);
   }
-  function upsert(table,id){
-
+  function upsert(table,data){
+    return req('POST', table, data)
+  }
+  function update(table, data){
+    return req('PUT', table, data)
   }
   function query(table, query, join){
-
-  } */
+    const format = {
+      query: query,
+      join: join,
+    }
+    return req('POST',table, format)
+  }
   function req(method, table, data){
     let url = URL + '/' + table;
-    body='';
+    let body = '';
+    if(typeof data !== 'object' && data){
+      url += `/${data}`
+      console.log(typeof data)
+    }else if(data){
+      body= JSON.stringify(data)
+      const urlExtra = Object.keys(data)[0]
+      urlExtra === "query" && (url += "/details")
+    }
     return new Promise((resolve,reject)=>{
       request({
         method,
@@ -38,6 +53,10 @@ function createRemoteDB(host,port){ //el host y port de nuestro microservicio
   //NUESTRO CONTROLLER AHORA INTERACUTA CON ESTE OBJETO ↓
   return {
     list,
+    get,
+    upsert,
+    update,
+    query,
   }
 }
 module.exports = createRemoteDB

@@ -1,7 +1,7 @@
 const TABLA = 'post'
 const {nanoid} = require('nanoid');
 const err = require('../../../utils/error');
-const auth = require('../auth');
+
 
 module.exports =  function(injectedStore){
   let store = injectedStore;

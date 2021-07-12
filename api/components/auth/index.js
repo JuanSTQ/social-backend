@@ -1,3 +1,3 @@
 const ctr = require('./controller') //function
-const store = require('../../../store/mysql')
+const store = require('../../../store/remote-mysql')
 module.exports = ctr(store)

@@ -3,6 +3,7 @@ const user= {
   age: "18",
   novia: "Ninguna",
 }
+console.log(Object.keys(user))
 for(let c in user){
   console.log(c)
 }
